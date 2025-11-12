@@ -8,20 +8,31 @@
     body {
       font-family: 'Poppins', sans-serif;
       background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-      height: 100vh;
+      min-height: 100vh;
       margin: 0;
-      overflow: hidden;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: flex-start;
       align-items: center;
       text-align: center;
       color: #fff;
+      padding: 50px 20px;
+      overflow-y: auto; /* ✅ enable scrolling */
     }
 
     h1 {
       font-size: 3em;
       margin-bottom: 20px;
+    }
+
+    img {
+      width: 200px;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 5px solid white;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      margin-bottom: 25px;
     }
 
     button {
@@ -43,17 +54,28 @@
     #video-container {
       margin-top: 40px;
       display: none;
-      width: 80%;
+      width: 90%;
       max-width: 640px;
       height: 360px;
       border-radius: 15px;
       overflow: hidden;
       box-shadow: 0 4px 30px rgba(0,0,0,0.3);
     }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 2em; }
+      img { width: 150px; height: 150px; }
+      button { font-size: 1em; padding: 12px 24px; }
+      #video-container { height: 240px; }
+    }
   </style>
 </head>
 <body>
   <h1>🎂 Happy Birthday! 🎉</h1>
+
+  <!-- Birthday photo -->
+  <img src="img.png" alt="Birthday Photo" id="birthday-photo" />
+
   <button id="launchBtn">Launch Music Video</button>
 
   <div id="video-container">
@@ -70,71 +92,67 @@
   <!-- Confetti library -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
-<script>
-  const button = document.getElementById('launchBtn');
-  const videoContainer = document.getElementById('video-container');
-  const video = document.getElementById('yt-video');
-  const music = document.getElementById('celebrationMusic');
+  <script>
+    const button = document.getElementById('launchBtn');
+    const videoContainer = document.getElementById('video-container');
+    const video = document.getElementById('yt-video');
+    const music = document.getElementById('celebrationMusic');
 
-  function launchConfetti() {
-    const duration = 4 * 1000;
-    const end = Date.now() + duration;
+    function launchConfetti() {
+      const duration = 4 * 1000;
+      const end = Date.now() + duration;
 
-    (function frame() {
-      confetti({
-        particleCount: 5,
-        angle: 60,
-        spread: 55,
-        origin: { x: 0 }
-      });
-      confetti({
-        particleCount: 5,
-        angle: 120,
-        spread: 55,
-        origin: { x: 1 }
-      });
-      if (Date.now() < end) requestAnimationFrame(frame);
-    })();
-  }
-
-  function fadeOutAudio(audio, fadeDuration = 2000) {
-    const fadeStep = 50;
-    const fadeAmount = audio.volume / (fadeDuration / fadeStep);
-    const fade = setInterval(() => {
-      if (audio.volume - fadeAmount > 0) {
-        audio.volume -= fadeAmount;
-      } else {
-        audio.volume = 0;
-        audio.pause();
-        audio.currentTime = 0;
-        clearInterval(fade);
-      }
-    }, fadeStep);
-  }
-
-  button.addEventListener('click', async () => {
-    launchConfetti();
-
-    try {
-      await music.play();
-    } catch (e) {
-      console.warn("Audio play blocked:", e);
+      (function frame() {
+        confetti({
+          particleCount: 5,
+          angle: 60,
+          spread: 55,
+          origin: { x: 0 }
+        });
+        confetti({
+          particleCount: 5,
+          angle: 120,
+          spread: 55,
+          origin: { x: 1 }
+        });
+        if (Date.now() < end) requestAnimationFrame(frame);
+      })();
     }
 
-    // Fade out after 2 seconds
-    setTimeout(() => fadeOutAudio(music, 2000), 2000);
+    function fadeOutAudio(audio, fadeDuration = 2000) {
+      const fadeStep = 50;
+      const fadeAmount = audio.volume / (fadeDuration / fadeStep);
+      const fade = setInterval(() => {
+        if (audio.volume - fadeAmount > 0) {
+          audio.volume -= fadeAmount;
+        } else {
+          audio.volume = 0;
+          audio.pause();
+          audio.currentTime = 0;
+          clearInterval(fade);
+        }
+      }, fadeStep);
+    }
 
-    // Show video
-    videoContainer.style.display = 'block';
-    video.src = "https://www.youtube.com/embed/N7AILp06gzQ?autoplay=0"; // <-- Replace with your YouTube video ID
+    button.addEventListener('click', async () => {
+      launchConfetti();
 
-    button.innerText = "🎶 Music Released!";
-    button.disabled = true;
-  });
-</script>
+      try {
+        await music.play();
+      } catch (e) {
+        console.warn("Audio play blocked:", e);
+      }
 
+      // Fade out after 2 seconds
+      setTimeout(() => fadeOutAudio(music, 2000), 2000);
+
+      // Show video
+      videoContainer.style.display = 'block';
+      video.src = "https://www.youtube.com/embed/N7AILp06gzQ?autoplay=0";
+
+      button.innerText = "🎶 Music Released!";
+      button.disabled = true;
+    });
+  </script>
 </body>
 </html>
-
-
-
