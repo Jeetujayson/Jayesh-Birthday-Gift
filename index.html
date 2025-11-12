@@ -57,10 +57,25 @@
       transform: scale(1.05);
     }
 
+    /* 📱 Bigger image for mobile */
     @media (max-width: 600px) {
       h1 { font-size: 2em; }
-      img { width: 150px; height: 150px; }
-      button { font-size: 1em; padding: 12px 24px; }
+      img { 
+        width: 320px; 
+        height: 320px; 
+      }
+      button { 
+        font-size: 1em; 
+        padding: 12px 24px; 
+      }
+    }
+
+    /* Optional: slightly smaller size for very small phones */
+    @media (max-width: 400px) {
+      img {
+        width: 280px;
+        height: 280px;
+      }
     }
   </style>
 </head>
