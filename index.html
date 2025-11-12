@@ -93,66 +93,80 @@
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
   <script>
-    const button = document.getElementById('launchBtn');
-    const videoContainer = document.getElementById('video-container');
-    const video = document.getElementById('yt-video');
-    const music = document.getElementById('celebrationMusic');
+  const button = document.getElementById('launchBtn');
+  const videoContainer = document.getElementById('video-container');
+  const video = document.getElementById('yt-video');
+  const music = document.getElementById('celebrationMusic');
 
-    function launchConfetti() {
-      const duration = 4 * 1000;
-      const end = Date.now() + duration;
+  function launchConfetti() {
+    const duration = 4 * 1000;
+    const end = Date.now() + duration;
 
-      (function frame() {
-        confetti({
-          particleCount: 5,
-          angle: 60,
-          spread: 55,
-          origin: { x: 0 }
-        });
-        confetti({
-          particleCount: 5,
-          angle: 120,
-          spread: 55,
-          origin: { x: 1 }
-        });
-        if (Date.now() < end) requestAnimationFrame(frame);
-      })();
+    (function frame() {
+      confetti({
+        particleCount: 5,
+        angle: 60,
+        spread: 55,
+        origin: { x: 0 }
+      });
+      confetti({
+        particleCount: 5,
+        angle: 120,
+        spread: 55,
+        origin: { x: 1 }
+      });
+      if (Date.now() < end) requestAnimationFrame(frame);
+    })();
+  }
+
+  // Mobile-safe fade-out
+  function fadeOutAudio(audio, fadeDuration = 2000) {
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+    if (isMobile) {
+      // On mobile, directly stop the music instead of fading
+      setTimeout(() => {
+        audio.pause();
+        audio.currentTime = 0;
+      }, fadeDuration);
+      return;
     }
 
-    function fadeOutAudio(audio, fadeDuration = 2000) {
-      const fadeStep = 50;
-      const fadeAmount = audio.volume / (fadeDuration / fadeStep);
-      const fade = setInterval(() => {
-        if (audio.volume - fadeAmount > 0) {
-          audio.volume -= fadeAmount;
-        } else {
-          audio.volume = 0;
-          audio.pause();
-          audio.currentTime = 0;
-          clearInterval(fade);
-        }
-      }, fadeStep);
-    }
-
-    button.addEventListener('click', async () => {
-      launchConfetti();
-
-      try {
-        await music.play();
-      } catch (e) {
-        console.warn("Audio play blocked:", e);
+    // Desktop: do a real fade
+    const fadeStep = 50;
+    const fadeAmount = audio.volume / (fadeDuration / fadeStep);
+    const fade = setInterval(() => {
+      if (audio.volume - fadeAmount > 0) {
+        audio.volume -= fadeAmount;
+      } else {
+        audio.volume = 0;
+        audio.pause();
+        audio.currentTime = 0;
+        clearInterval(fade);
       }
+    }, fadeStep);
+  }
 
-      // Fade out after 2 seconds
-      setTimeout(() => fadeOutAudio(music, 2000), 2000);
+  button.addEventListener('click', async () => {
+    launchConfetti();
 
-      // Show video
-      videoContainer.style.display = 'block';
-      video.src = "https://www.youtube.com/embed/N7AILp06gzQ?autoplay=0";
+    try {
+      await music.play();
+    } catch (e) {
+      console.warn("Audio play blocked:", e);
+    }
 
-      button.innerText = "🎶 Music Released!";
-      button.disabled = true;
-    });
-  </script>
+    // Always stop/fade after 2 seconds
+    setTimeout(() => fadeOutAudio(music, 2000), 2000);
+
+    // Show video
+    videoContainer.style.display = 'block';
+    video.src = "https://www.youtube.com/embed/N7AILp06gzQ?autoplay=0";
+
+    button.innerText = "🎶 Music Released!";
+    button.disabled = true;
+  });
+</script>
+
 </body>
 </html>
