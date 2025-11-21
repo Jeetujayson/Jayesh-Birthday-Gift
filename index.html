@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Happy Birthday 🎉</title>
+  <title>Song Launch 🎵</title>
   <style>
     body {
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
       min-height: 100vh;
       margin: 0;
       display: flex;
@@ -29,114 +29,66 @@
       width: 400px;
       height: 400px;
       object-fit: cover;
-      border-radius: 50%;
+      border-radius: 20px;
       border: 5px solid white;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
       margin-top: 25px;
-      opacity: 0;
-      transition: opacity 1s ease;
     }
 
-    img.visible {
-      opacity: 1;
+    .button-container {
+      margin-top: 35px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      width: 80%;
+      max-width: 300px;
     }
 
-    button {
-      background: #ff4081;
+    a.button {
+      text-decoration: none;
       color: white;
-      border: none;
-      padding: 15px 30px;
-      border-radius: 30px;
+      padding: 15px 20px;
+      border-radius: 40px;
       font-size: 1.2em;
-      cursor: pointer;
-      transition: 0.3s;
+      display: block;
+      text-align: center;
+      transition: 0.25s ease;
+      font-weight: 600;
     }
 
-    button:hover {
-      background: #e91e63;
-      transform: scale(1.05);
-    }
+    .spotify { background: #1DB954; }
+    .spotify:hover { background: #169c46; }
 
-    /* 📱 Bigger image for mobile */
+    .youtube { background: #FF0000; }
+    .youtube:hover { background: #cc0000; }
+
+    .amazon { background: #FF9900; }
+    .amazon:hover { background: #e68a00; }
+
     @media (max-width: 600px) {
       h1 { font-size: 2em; }
-      img { 
-        width: 320px; 
-        height: 320px; 
-      }
-      button { 
-        font-size: 1em; 
-        padding: 12px 24px; 
-      }
+      img { width: 320px; height: 320px; }
+      a.button { font-size: 1em; }
     }
 
-    /* Optional: slightly smaller size for very small phones */
     @media (max-width: 400px) {
-      img {
-        width: 280px;
-        height: 280px;
-      }
+      img { width: 280px; height: 280px; }
     }
   </style>
 </head>
 <body>
 
+  <h1>🎵 New Song Out Now!</h1>
 
-  <!-- Hidden Birthday photo -->
-  <img src="img.png" alt="Birthday Photo" id="birthday-photo" />
+  <!-- Song Cover Image -->
+  <img src="img.png" alt="Song Cover" />
 
-  <br>
-  <button id="launchBtn">Launch Music Video 🎁</button>
+  <!-- Streaming Buttons -->
+  <div class="button-container">
+    <a class="button spotify" href="#" target="_blank">Listen on Spotify</a>
+    <a class="button youtube" href="#" target="_blank">Watch on YouTube</a>
+    <a class="button amazon" href="https://music.amazon.in/albums/B0G1BVXL38?trackAsin=B0G1BW9J1L&do=play&ts=1763542957&ref=dm_sh_szSpFwo98Z2IZnwweY4iGpP39&referrer=dm_sh_whatsapp" target="_blank">Amazon Music</a>
+  </div>
 
-  <!-- Celebration music -->
-  <audio id="celebrationMusic" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" loop></audio>
-
-  <!-- Confetti -->
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
-
-  <script>
-    const button = document.getElementById('launchBtn');
-    const music = document.getElementById('celebrationMusic');
-    const photo = document.getElementById('birthday-photo');
-
-    function launchConfetti() {
-      const duration = 4 * 1000;
-      const end = Date.now() + duration;
-      (function frame() {
-        confetti({
-          particleCount: 5,
-          angle: 60,
-          spread: 55,
-          origin: { x: 0 }
-        });
-        confetti({
-          particleCount: 5,
-          angle: 120,
-          spread: 55,
-          origin: { x: 1 }
-        });
-        if (Date.now() < end) requestAnimationFrame(frame);
-      })();
-    }
-
-    button.addEventListener('click', async () => {
-      // Launch confetti
-      launchConfetti();
-
-      // Play music (looping)
-      try {
-        await music.play();
-      } catch (e) {
-        console.warn("Audio play blocked:", e);
-      }
-
-      // Show the image
-      photo.classList.add('visible');
-
-      // Update button
-      button.innerText = "🎉 Music Released!";
-      button.disabled = true;
-    });
-  </script>
 </body>
 </html>
