@@ -4,6 +4,25 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Song Launch 🎵</title>
+  
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1171241981270812');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1171241981270812&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+
   <style>
     body {
       font-family: 'Poppins', sans-serif;
@@ -86,9 +105,19 @@
   <!-- Streaming Buttons -->
   <div class="button-container">
     <a class="button spotify" href="https://open.spotify.com/album/61C6bh4vorUwr796owvl4G?si=s9WrXarjSByt5SVYIve71w&nd=1&dlsi=267be074986244d1" target="_blank">Listen on Spotify</a>
-    <a class="button youtube" href="https://www.youtube.com/watch?v=MxQtCm0cHp0&list=RDMxQtCm0cHp0&start_radio=1" target="_blank">Watch on YouTube</a>
+    <a class="button youtube" id="youtube-btn" href="https://www.youtube.com/watch?v=MxQtCm0cHp0&list=RDMxQtCm0cHp0&start_radio=1" target="_blank">Watch on YouTube</a>
     <a class="button amazon" href="https://music.amazon.in/albums/B0G1BVXL38?trackAsin=B0G1BW9J1L&do=play&ts=1763542957&ref=dm_sh_szSpFwo98Z2IZnwweY4iGpP39&referrer=dm_sh_whatsapp" target="_blank">Amazon Music</a>
   </div>
+
+  <script>
+    // Track YouTube button clicks
+    document.getElementById('youtube-btn').addEventListener('click', function() {
+      fbq('track', 'Lead', {
+        content_name: 'YouTube Video Click',
+        content_category: 'Music Video'
+      });
+    });
+  </script>
 
 </body>
 </html>
